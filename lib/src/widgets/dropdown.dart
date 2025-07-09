@@ -193,29 +193,69 @@ class _Dropdown<T> extends StatelessWidget {
   }
 }
 
-class _SearchField extends StatelessWidget {
+class _SearchField extends StatefulWidget {
   const _SearchField({
     required this.decoration,
     required this.onChanged,
   });
 
   final SearchFieldDecoration decoration;
-
   final ValueChanged<String> onChanged;
 
   @override
+  State<_SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  late FocusNode _focusNode;
+  bool _hasFocus = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(_handleFocusChange);
+  }
+
+  void _handleFocusChange() {
+    setState(() {
+      _hasFocus = _focusNode.hasFocus;
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_handleFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  Color? get _borderColor {
+    final border =
+        _hasFocus ? widget.decoration.focusedBorder : widget.decoration.border;
+    if (border is OutlineInputBorder) {
+      return border.borderSide.color;
+    }
+    return null;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final floatingColor = _borderColor;
     return Padding(
       padding: const EdgeInsets.all(8),
       child: TextField(
+        focusNode: _focusNode,
         decoration: InputDecoration(
           isDense: true,
-          hintText: decoration.hintText,
-          border: decoration.border,
-          focusedBorder: decoration.focusedBorder,
-          suffixIcon: decoration.searchIcon,
+          hintText: widget.decoration.hintText,
+          border: widget.decoration.border,
+          focusedBorder: widget.decoration.focusedBorder,
+          suffixIcon: widget.decoration.searchIcon,
+          floatingLabelStyle:
+              floatingColor != null ? TextStyle(color: floatingColor) : null,
         ),
-        onChanged: onChanged,
+        onChanged: widget.onChanged,
       ),
     );
   }
