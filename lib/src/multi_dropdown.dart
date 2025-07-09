@@ -512,10 +512,22 @@ class _MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
           )
         : null;
 
+    // Determinar cor do floating label conforme o foco
+    Color? floatingColor;
+    final isFocused = _dropdownController.isOpen;
+    final usedBorder = isFocused
+        ? (fieldDecoration.focusedBorder ?? border)
+        : (fieldDecoration.border ?? border);
+    if (usedBorder is OutlineInputBorder) {
+      floatingColor = usedBorder.borderSide.color;
+    }
+
     return InputDecoration(
       enabled: widget.enabled,
       labelText: fieldDecoration.labelText,
       labelStyle: fieldDecoration.labelStyle,
+      floatingLabelStyle: fieldDecoration.floatingLabelStyle ??
+          (floatingColor != null ? TextStyle(color: floatingColor) : null),
       hintText: fieldDecoration.hintText,
       hintStyle: fieldDecoration.hintStyle,
       errorText: _formFieldKey.currentState?.errorText,
