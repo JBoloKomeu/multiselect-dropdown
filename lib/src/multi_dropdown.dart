@@ -106,6 +106,7 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
     this.onSelectionChange,
     this.onSearchChange,
     this.closeOnBackButton = false,
+    this.autoFocusSearchField = false,
     Key? key,
   })  : future = null,
         super(key: key);
@@ -154,6 +155,7 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
     this.onSelectionChange,
     this.onSearchChange,
     this.closeOnBackButton = false,
+    this.autoFocusSearchField = false,
     Key? key,
   })  : items = const [],
         super(key: key);
@@ -224,6 +226,9 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
   ///
   /// Note: This option requires the app to have a router, such as MaterialApp.router, in order to work properly.
   final bool closeOnBackButton;
+
+  /// Se verdadeiro, ao abrir o dropdown o campo de pesquisa recebe foco automaticamente.
+  final bool autoFocusSearchField;
 
   @override
   State<MultiDropdown<T>> createState() => _MultiDropdownState<T>();
@@ -439,6 +444,7 @@ class _MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
                       maxSelections: widget.maxSelections,
                       singleSelect: widget.singleSelect,
                       onSearchChange: _dropdownController._setSearchQuery,
+                      autoFocusSearchField: widget.autoFocusSearchField,
                     ),
                   ),
                 ),
