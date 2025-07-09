@@ -18,7 +18,6 @@ class _Dropdown<T> extends StatelessWidget {
     this.itemBuilder,
     this.itemSeparator,
     this.singleSelect = false,
-    this.autoFocusSearchField = false,
   }) : super(key: key);
 
   /// The decoration of the dropdown.
@@ -56,9 +55,6 @@ class _Dropdown<T> extends StatelessWidget {
 
   /// Whether the selection is single.
   final bool singleSelect;
-
-  /// Whether the search field should be focused automatically.
-  final bool autoFocusSearchField;
 
   int get _selectedCount => items.where((element) => element.selected).length;
 
@@ -101,7 +97,6 @@ class _Dropdown<T> extends StatelessWidget {
                 _SearchField(
                   decoration: searchDecoration,
                   onChanged: _onSearchChange,
-                  autoFocus: autoFocusSearchField,
                 ),
               if (decoration.header != null)
                 Flexible(child: decoration.header!),
@@ -202,21 +197,17 @@ class _SearchField extends StatelessWidget {
   const _SearchField({
     required this.decoration,
     required this.onChanged,
-    this.autoFocus = false,
   });
 
   final SearchFieldDecoration decoration;
 
   final ValueChanged<String> onChanged;
 
-  final bool autoFocus;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: TextField(
-        autofocus: autoFocus,
         decoration: InputDecoration(
           isDense: true,
           hintText: decoration.hintText,
